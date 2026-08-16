@@ -1,0 +1,20 @@
+{
+	"name": "yahnis-elsts/plugin-update-checker",
+	"type": "library",
+	"description": "A custom update checker for WordPress plugins. Useful if you don't want to host your project in the official WP repository, but still want it to support automatic updates. Also works with themes.",
+	"keywords": ["wordpress", "plugin updates", "updates", "themes"],
+	"homepage": "https://github.com/YahnisElsts/plugin-update-checker/",
+	"license": "MIT",
+	"authors": [
+		{
+			"name": "Janis Elsts",
+			"email": "janis@w-shadow.com",
+			"homepage": "https://w-shadow.com/",
+			"role": "Developer"
+		}
+	],
+	"require": {
+		"php": ">=5.6.20",
+		"ext-json": "*"
+	}
+}
