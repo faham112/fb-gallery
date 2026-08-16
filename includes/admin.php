@@ -33,7 +33,6 @@ function fb_gallery_handle_admin_actions() {
 
     $action = isset( $_POST['fb_action'] ) ? sanitize_text_field( $_POST['fb_action'] ) : '';
 
-    // Add Domain
     if ( $action === 'add_domain' ) {
         $domain = isset( $_POST['domain'] ) ? sanitize_text_field( $_POST['domain'] ) : '';
         if ( $domain ) {
@@ -51,7 +50,6 @@ function fb_gallery_handle_admin_actions() {
         }
     }
 
-    // Delete Domain
     if ( $action === 'delete_domain' ) {
         $index = isset( $_POST['index'] ) ? intval( $_POST['index'] ) : -1;
         $domains = fb_gallery_get_domains();
@@ -62,7 +60,6 @@ function fb_gallery_handle_admin_actions() {
         }
     }
 
-    // Add Image by URL
     if ( $action === 'add_image_url' ) {
         $url = isset( $_POST['image_url'] ) ? esc_url_raw( trim( $_POST['image_url'] ) ) : '';
         if ( $url && filter_var( $url, FILTER_VALIDATE_URL ) ) {
@@ -75,7 +72,6 @@ function fb_gallery_handle_admin_actions() {
         }
     }
 
-    // Upload Image
     if ( $action === 'upload_image' && ! empty( $_FILES['image_file']['name'] ) ) {
         require_once ABSPATH . 'wp-admin/includes/file.php';
         require_once ABSPATH . 'wp-admin/includes/media.php';
@@ -95,7 +91,6 @@ function fb_gallery_handle_admin_actions() {
         }
     }
 
-    // Delete Image
     if ( $action === 'delete_image' ) {
         $index = isset( $_POST['index'] ) ? intval( $_POST['index'] ) : -1;
         $images = fb_gallery_get_images();
@@ -122,7 +117,7 @@ function fb_gallery_admin_page() {
     $page    = $page_id ? get_post( $page_id ) : null;
     ?>
     <div class="wrap fb-gallery-admin">
-        <h1>FB Gallery</h1>
+        <h1>FB Gallery <span style="font-size:13px;font-weight:400;color:#646970;margin-left:8px;">v<?php echo esc_html( FB_GALLERY_VERSION ); ?></span></h1>
 
         <?php settings_errors( 'fb_gallery' ); ?>
 
@@ -137,7 +132,6 @@ function fb_gallery_admin_page() {
             <?php endif; ?>
         </div>
 
-        <!-- ================= DOMAINS ================= -->
         <div class="fb-card">
             <h2>Redirect Domains <span class="count"><?php echo count( $domains ); ?>/5</span></h2>
             <p class="description">Maximum 5 domains. One will be chosen randomly on redirect.</p>
@@ -172,7 +166,6 @@ function fb_gallery_admin_page() {
             <?php endif; ?>
         </div>
 
-        <!-- ================= IMAGES ================= -->
         <div class="fb-card">
             <h2>Gallery Images <span class="count"><?php echo count( $images ); ?></span></h2>
             <p class="description">Add by URL or upload from your device.</p>
@@ -224,65 +217,27 @@ function fb_gallery_admin_page() {
             max-width: 780px;
             box-shadow: 0 1px 1px rgba(0,0,0,.04);
         }
-        .fb-gallery-admin .fb-card h2 {
-            margin-top: 0;
-            font-size: 1.2em;
-        }
-        .fb-gallery-admin .count {
-            font-size: 13px;
-            color: #666;
-            font-weight: 400;
-        }
-        .fb-gallery-admin .fb-list {
-            list-style: none;
-            margin: 12px 0 16px;
-            padding: 0;
-        }
+        .fb-gallery-admin .fb-card h2 { margin-top: 0; font-size: 1.2em; }
+        .fb-gallery-admin .count { font-size: 13px; color: #666; font-weight: 400; }
+        .fb-gallery-admin .fb-list { list-style: none; margin: 12px 0 16px; padding: 0; }
         .fb-gallery-admin .fb-list li {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            background: #f6f7f7;
-            border: 1px solid #dcdcde;
-            border-radius: 6px;
-            padding: 10px 12px;
-            margin-bottom: 8px;
-            flex-wrap: wrap;
+            display: flex; align-items: center; gap: 10px;
+            background: #f6f7f7; border: 1px solid #dcdcde; border-radius: 6px;
+            padding: 10px 12px; margin-bottom: 8px; flex-wrap: wrap;
         }
-        .fb-gallery-admin .fb-url {
-            flex: 1;
-            min-width: 0;
-            word-break: break-all;
-            font-size: 13px;
-        }
+        .fb-gallery-admin .fb-url { flex: 1; min-width: 0; word-break: break-all; font-size: 13px; }
         .fb-gallery-admin .fb-form-row {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            align-items: center;
-            margin-top: 12px;
+            display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-top: 12px;
         }
         .fb-gallery-admin .fb-form-row input[type="text"],
-        .fb-gallery-admin .fb-form-row input[type="url"] {
-            flex: 1;
-            min-width: 220px;
-        }
+        .fb-gallery-admin .fb-form-row input[type="url"] { flex: 1; min-width: 220px; }
         .fb-gallery-admin .fb-upload-box {
-            margin-top: 18px;
-            padding: 16px;
-            border: 1px dashed #c3c4c7;
-            border-radius: 6px;
-            background: #f6f7f7;
+            margin-top: 18px; padding: 16px; border: 1px dashed #c3c4c7;
+            border-radius: 6px; background: #f6f7f7;
         }
         @media (max-width: 600px) {
-            .fb-gallery-admin .fb-form-row {
-                flex-direction: column;
-                align-items: stretch;
-            }
-            .fb-gallery-admin .fb-form-row input {
-                width: 100%;
-                min-width: 0;
-            }
+            .fb-gallery-admin .fb-form-row { flex-direction: column; align-items: stretch; }
+            .fb-gallery-admin .fb-form-row input { width: 100%; min-width: 0; }
         }
     </style>
     <?php
