@@ -3,7 +3,7 @@
  * Plugin Name: FB-Gallery
  * Plugin URI:  https://github.com/faham112/fb-gallery
  * Description: Stylish image gallery with random domain redirect. Made by ❤️ coded by Faheem Badshah
- * Version:     1.0.3
+ * Version:     1.0.5
  * Author:      Faheem Badshah
  * Author URI:  https://wa.me/923013250144
  * Text Domain: fb-gallery
@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-define( 'FB_GALLERY_VERSION', '1.0.3' );
+define( 'FB_GALLERY_VERSION', '1.0.5' );
 define( 'FB_GALLERY_PATH', plugin_dir_path( __FILE__ ) );
 define( 'FB_GALLERY_URL', plugin_dir_url( __FILE__ ) );
 define( 'FB_GALLERY_MAX_DOMAINS', 5 );
