@@ -23,13 +23,6 @@ Stylish WordPress image gallery with random domain redirect.
 4. Go to **Settings → Reading** → set **FB Gallery** as Homepage
 5. Open **FB Gallery** menu in admin to manage domains & images
 
-## Auto-Update Setup
-
-1. Download [Plugin Update Checker](https://github.com/YahnisElsts/plugin-update-checker)
-2. Extract and place the `plugin-update-checker` folder inside this plugin
-3. Create a **Release** on GitHub (e.g. tag `v1.0.1`) whenever you update the plugin
-4. WordPress will automatically detect the new version
-
 ## Login URL
 
 Admin login is available at:
@@ -41,7 +34,6 @@ https://yourdomain.com/login.php
 ## Author
 
 - Faheem Badshah
-- WhatsApp: [+92 301 3250144](https://wa.me/923013250144)
 - GitHub: [faham112](https://github.com/faham112)
 
 ## License
