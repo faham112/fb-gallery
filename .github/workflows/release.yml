@@ -1,0 +1,70 @@
+name: Build & Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Get version from tag
+        id: version
+        run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
+
+      - name: Build plugin ZIP
+        run: |
+          # Create clean folder for packaging
+          mkdir -p dist/fb-gallery
+          
+          # Copy core plugin files
+          cp fb-gallery.php dist/fb-gallery/
+          cp readme.txt dist/fb-gallery/
+          cp README.md dist/fb-gallery/ 2>/dev/null || true
+          cp -r includes dist/fb-gallery/
+          
+          # Include Plugin Update Checker (download if not in repo)
+          if [ -d plugin-update-checker ]; then
+            cp -r plugin-update-checker dist/fb-gallery/
+          else
+            echo "Downloading Plugin Update Checker..."
+            curl -sL "https://github.com/YahnisElsts/plugin-update-checker/archive/refs/tags/v5.6.zip" -o /tmp/puc.zip
+            unzip -q /tmp/puc.zip -d /tmp
+            mv /tmp/plugin-update-checker-5.6 dist/fb-gallery/plugin-update-checker
+          fi
+          
+          # Create ZIP
+          cd dist
+          zip -rq ../fb-gallery.zip fb-gallery
+          cd ..
+          
+          echo "ZIP created:"
+          ls -lh fb-gallery.zip
+          unzip -l fb-gallery.zip | head -40
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: FB-Gallery v${{ steps.version.outputs.VERSION }}
+          body: |
+            ## FB-Gallery v${{ steps.version.outputs.VERSION }}
+            
+            Automatic release built by CI/CD.
+            
+            ### Install / Update
+            Download `fb-gallery.zip` below and install/update in WordPress.
+            
+            Made by ❤️ coded by Faheem Badshah
+          files: fb-gallery.zip
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -1,0 +1,30 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Check required files
+        run: |
+          echo "Checking plugin structure..."
+          test -f fb-gallery.php || (echo "Missing fb-gallery.php" && exit 1)
+          test -f includes/admin.php || (echo "Missing admin.php" && exit 1)
+          test -f includes/frontend.php || (echo "Missing frontend.php" && exit 1)
+          test -f includes/functions.php || (echo "Missing functions.php" && exit 1)
+          test -f includes/login.php || (echo "Missing login.php" && exit 1)
+          echo "All required files present."
+
+      - name: Check version header
+        run: |
+          grep -q "Version:" fb-gallery.php
+          grep -q "FB_GALLERY_VERSION" fb-gallery.php
+          echo "Version header OK"
