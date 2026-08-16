@@ -26,24 +26,42 @@ require_once FB_GALLERY_PATH . 'includes/frontend.php';
 require_once FB_GALLERY_PATH . 'includes/login.php';
 
 /**
- * GitHub Auto-Update (Plugin Update Checker included)
+ * GitHub Auto-Update (safe load — will not crash site if library missing/incomplete)
  */
-if ( file_exists( FB_GALLERY_PATH . 'plugin-update-checker/plugin-update-checker.php' ) ) {
-    require_once FB_GALLERY_PATH . 'plugin-update-checker/plugin-update-checker.php';
+function fb_gallery_init_updater() {
+    $puc_file = FB_GALLERY_PATH . 'plugin-update-checker/plugin-update-checker.php';
 
-    $fb_gallery_update_checker = \YahnisElsts\PluginUpdateChecker\v5\PucFactory::buildUpdateChecker(
-        'https://github.com/faham112/fb-gallery/',
-        __FILE__,
-        'fb-gallery'
-    );
+    if ( ! file_exists( $puc_file ) ) {
+        return;
+    }
 
-    // Use ZIP attached to GitHub Releases for updates
-    $fb_gallery_update_checker->getVcsApi()->enableReleaseAssets();
+    try {
+        require_once $puc_file;
+
+        if ( ! class_exists( '\YahnisElsts\PluginUpdateChecker\v5\PucFactory' ) ) {
+            return;
+        }
+
+        $checker = \YahnisElsts\PluginUpdateChecker\v5\PucFactory::buildUpdateChecker(
+            'https://github.com/faham112/fb-gallery/',
+            __FILE__,
+            'fb-gallery'
+        );
+
+        if ( $checker && method_exists( $checker, 'getVcsApi' ) ) {
+            $api = $checker->getVcsApi();
+            if ( $api && method_exists( $api, 'enableReleaseAssets' ) ) {
+                $api->enableReleaseAssets();
+            }
+        }
+    } catch ( \Throwable $e ) {
+        if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+            error_log( 'FB-Gallery updater error: ' . $e->getMessage() );
+        }
+    }
 }
+add_action( 'plugins_loaded', 'fb_gallery_init_updater', 20 );
 
-/**
- * Activation: Create the Gallery page automatically
- */
 function fb_gallery_activate() {
     $existing_id = get_option( 'fb_gallery_page_id' );
 
@@ -56,7 +74,7 @@ function fb_gallery_activate() {
         'post_content' => '',
         'post_status'  => 'publish',
         'post_type'    => 'page',
-        'post_author'  => 1,
+        'post_author'  => get_current_user_id() ? get_current_user_id() : 1,
     ) );
 
     if ( $page_id && ! is_wp_error( $page_id ) ) {
