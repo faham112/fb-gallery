@@ -3,7 +3,7 @@ Contributors: faheembadshah
 Tags: gallery, redirect, images
 Requires at least: 5.0
 Tested up to: 6.7
-Stable tag: 1.0.0
+Stable tag: 1.0.1
 License: GPLv2 or later
 
 Stylish image gallery with random domain redirect. Made by ❤️ coded by Faheem Badshah
@@ -27,6 +27,10 @@ FB-Gallery creates a beautiful dark grid gallery.
 4. Open "FB Gallery" menu in admin sidebar to add domains & images
 
 == Changelog ==
+
+= 1.0.1 =
+* Minor version release
+* Improved stability and readiness for auto-updates
 
 = 1.0.0 =
 * Initial release
