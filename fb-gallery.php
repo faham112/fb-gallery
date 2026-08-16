@@ -26,9 +26,7 @@ require_once FB_GALLERY_PATH . 'includes/frontend.php';
 require_once FB_GALLERY_PATH . 'includes/login.php';
 
 /**
- * GitHub Auto-Update (Plugin Update Checker)
- * Download library: https://github.com/YahnisElsts/plugin-update-checker
- * Place the "plugin-update-checker" folder inside this plugin to enable auto-updates.
+ * GitHub Auto-Update (Plugin Update Checker included)
  */
 if ( file_exists( FB_GALLERY_PATH . 'plugin-update-checker/plugin-update-checker.php' ) ) {
     require_once FB_GALLERY_PATH . 'plugin-update-checker/plugin-update-checker.php';
@@ -39,7 +37,7 @@ if ( file_exists( FB_GALLERY_PATH . 'plugin-update-checker/plugin-update-checker
         'fb-gallery'
     );
 
-    // Prefer GitHub Releases
+    // Use ZIP attached to GitHub Releases for updates
     $fb_gallery_update_checker->getVcsApi()->enableReleaseAssets();
 }
 
@@ -50,7 +48,6 @@ function fb_gallery_activate() {
     $existing_id = get_option( 'fb_gallery_page_id' );
 
     if ( $existing_id && get_post( $existing_id ) ) {
-        // Page already exists
         return;
     }
 
@@ -66,7 +63,6 @@ function fb_gallery_activate() {
         update_option( 'fb_gallery_page_id', $page_id );
     }
 
-    // Default settings
     if ( false === get_option( 'fb_gallery_domains' ) ) {
         update_option( 'fb_gallery_domains', array(
             'https://example1.com',
@@ -94,10 +90,6 @@ function fb_gallery_activate() {
 }
 register_activation_hook( __FILE__, 'fb_gallery_activate' );
 
-/**
- * Deactivation (optional cleanup - we keep the page)
- */
 function fb_gallery_deactivate() {
-    // Keep page and settings so user doesn't lose data
 }
 register_deactivation_hook( __FILE__, 'fb_gallery_deactivate' );
